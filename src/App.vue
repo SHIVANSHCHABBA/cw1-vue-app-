@@ -1,22 +1,30 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import { computed } from 'vue';
-import { cart } from './store/cart.js';
+import { RouterView, useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { cart } from './store/cart.js'
 
-const count = computed(() =>
-  cart.items.reduce((sum, it) => sum + (it.qty || 0), 0)
-);
+const router = useRouter()
+const hasItems = computed(() => cart.items.length > 0)
+const count = computed(() => cart.items.reduce((s, it) => s + (it.qty || 0), 0))
+
+function goLessons() { router.push('/') }
+function goCart()    { if (hasItems.value) router.push('/cart') }
 </script>
 
 <template>
-  <nav class="p-3 border-bottom d-flex gap-3 align-items-center">
-    <RouterLink to="/">Lessons</RouterLink>
-    <RouterLink to="/cart">Cart</RouterLink>
+  <nav class="p-3 border-bottom d-flex gap-2 align-items-center">
+    <button class="btn btn-link" @click="goLessons">Lessons</button>
+
+    <button class="btn btn-primary d-inline-flex align-items-center gap-2"
+            :disabled="!hasItems" @click="goCart">
+      Cart
+      <span v-if="count" class="badge bg-light text-dark">{{ count }}</span>
+    </button>
   </nav>
+
   <RouterView />
 </template>
 
 <style scoped>
-nav a { text-decoration: none; }
-nav a.router-link-active { font-weight: 600; }
+nav :is(a,button){ text-decoration:none }
 </style>
