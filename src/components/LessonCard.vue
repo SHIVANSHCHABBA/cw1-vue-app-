@@ -1,34 +1,17 @@
+<script setup>
+const props = defineProps({ lesson: Object, onAdd: Function });
+</script>
+
 <template>
-  <div class="card" style="width: 18rem;">
+  <div class="card h-100 shadow-sm">
     <div class="card-body">
-      <h5 class="card-title">{{ lesson.topic }}</h5>
-      <h6 class="card-subtitle mb-2 text-muted">{{ lesson.location }}</h6>
-      <p class="card-text">Price: £{{ lesson.price }}</p>
-      <p class="card-text">Spaces: {{ spaces }}</p>
-      <button
-        class="btn btn-primary"
-        :disabled="spaces <= 0"
-        @click="addToCart"
-      >
+      <h5 class="card-title mb-2">{{ lesson.topic }}</h5>
+      <p class="mb-1"><strong>Location:</strong> {{ lesson.location }}</p>
+      <p class="mb-1"><strong>Price:</strong> £{{ lesson.price }}</p>
+      <p class="mb-3"><strong>Spaces:</strong> {{ lesson.space }}</p>
+      <button class="btn btn-primary w-100" :disabled="lesson.space === 0" @click="onAdd(lesson)">
         Add to cart
       </button>
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import { cart } from '../store/cart.js';
-
-const props = defineProps({
-  lesson: { type: Object, required: true }
-});
-
-const spaces = ref(props.lesson.space ?? props.lesson.spaces ?? 0);
-
-function addToCart() {
-  if (spaces.value <= 0) return;
-  cart.add(props.lesson);
-  spaces.value = Math.max(0, spaces.value - 1);
-}
-</script>
