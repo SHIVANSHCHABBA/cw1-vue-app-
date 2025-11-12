@@ -3,7 +3,6 @@ import { RouterView, useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { cart } from './store/cart'
 
-// Works locally AND on GitHub Pages
 const bgUrl = `${import.meta.env.BASE_URL}assets/study_bg.png`
 
 const router = useRouter()
@@ -17,10 +16,9 @@ function goCart(){ if (hasItems.value) router.push('/cart') }
   <!-- Background photo (lamp/books) -->
   <div class="bg-photo" :style="{ backgroundImage: `url('${bgUrl}')` }" aria-hidden="true"></div>
 
-  <!-- Centered clay panel, like the screenshot -->
+  <!-- Main “clay panel” -->
   <main class="container my-3 my-md-4">
     <div class="surface rounded-5 shadow-xxl">
-      <!-- Light panel header with brand + cart pill -->
       <div class="surface-head d-flex align-items-center justify-content-between px-3 px-md-4 py-2">
         <button class="btn btn-link brand text-decoration-none p-0" @click="goLessons">EduLessons</button>
 
@@ -32,7 +30,6 @@ function goCart(){ if (hasItems.value) router.push('/cart') }
         </button>
       </div>
 
-      <!-- Body area where Lessons/Cart pages render -->
       <div class="surface-body p-3 p-md-4 p-lg-5">
         <transition name="fade" mode="out-in">
           <RouterView />
@@ -47,77 +44,102 @@ function goCart(){ if (hasItems.value) router.push('/cart') }
 </template>
 
 <style>
-/* 0) Base */
-:root { color-scheme: light; }
-body{ margin:0; min-height:100vh; background:#eaf0f7; }
+/* ===================== GLOBAL ===================== */
+:root {
+  --soft-blue: #7a91c9;
+  --muted-bg: #e8edf4;
+  --panel-bg: #f4f6f9;
+  --panel-shadow: rgba(0, 0, 0, 0.08);
+  --brand-dark: #25324b;
+  --accent-blue: #4c7ce0;
+}
 
-/* 1) Background photo behaves like the screenshot */
-.bg-photo{
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--muted-bg);
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+/* ===================== BACKGROUND IMAGE ===================== */
+.bg-photo {
   position: fixed;
   inset: 0;
   z-index: -2;
   pointer-events: none;
-  background-position: center;      /* adjust this if you want more lamp/books visible */
-  background-size: cover;
+  background-position: 45% center; /* lamp + books aligned visually */
   background-repeat: no-repeat;
+  background-size: cover;
   background-attachment: fixed;
-}
-/* Gentle vignette for depth */
-.bg-photo::after{
-  content:"";
-  position:absolute; inset:0;
-  background:
-    radial-gradient(1200px 520px at 50% 102%, rgba(0,0,0,.08), transparent 60%),
-    linear-gradient(to bottom, rgba(255,255,255,.06), rgba(255,255,255,.06));
+  filter: brightness(0.97) saturate(0.94); /* tone down whites slightly */
 }
 
-/* 2) Main surface (matches the device-like panel in the reference) */
-.surface{
-  max-width: 1060px;           /* width similar to screenshot */
+.bg-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(245, 247, 251, 0.35);
+  backdrop-filter: blur(2px);
+}
+
+/* ===================== SURFACE (CLAY PANEL) ===================== */
+.surface {
+  max-width: 1100px;
   margin: 0 auto;
-  background: #f6f5f2;         /* warm light header background tone */
-  border: 1px solid rgba(0,0,0,.05);
-  overflow: hidden;            /* clip children to rounded corners */
-  border-radius: 28px;         /* big radius like the mock */
-}
-/* inner shadow + lift */
-.shadow-xxl{
-  box-shadow:
-    0 28px 68px rgba(0,0,0,.18),
-    0 2px 0 rgba(255,255,255,.7) inset;
+  background: var(--panel-bg);
+  border-radius: 32px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 28px 80px var(--panel-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
-/* 3) Panel header (inside the surface) */
-.surface-head{
-  background: #f3f2ef;
-  border-bottom: 1px solid rgba(0,0,0,.06);
+/* ===================== HEADER ===================== */
+.surface-head {
+  background: #f0f2f6;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
-.brand{
+
+.brand {
   font-weight: 800;
-  font-size: 1.25rem;
-  color: #1b2a4e;
+  font-size: 1.3rem;
+  color: var(--brand-dark);
+  letter-spacing: -0.5px;
 }
 
-/* Cart pill like the screenshot */
-.cart-pill{
+/* ===================== CART BUTTON ===================== */
+.cart-pill {
   border-radius: 999px;
-  padding: .35rem .8rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,.08);
+  background-color: #f9fafb;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  color: var(--brand-dark);
+  transition: all 0.2s ease;
+}
+.cart-pill:hover {
+  background-color: #eef1f8;
 }
 
-/* 4) Content area under the header is white in the screenshot */
-.surface-body{
-  background: #ffffff;
-  border-top: 1px solid rgba(255,255,255,.8);
+/* ===================== BODY ===================== */
+.surface-body {
+  background: #ffffffcc; /* slightly translucent to let bg influence tone */
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
 }
 
-/* 5) Page fade transition */
-.fade-enter-active, .fade-leave-active { transition: opacity .25s ease }
-.fade-enter-from, .fade-leave-to { opacity: 0 }
+/* ===================== TRANSITIONS ===================== */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
 
-/* 6) Responsive tweaks */
-@media (max-width: 576px){
-  .surface{ border-radius: 18px; }
-  .surface-body{ padding: 1.25rem !important; }
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 576px) {
+  .surface {
+    border-radius: 20px;
+  }
+  .surface-body {
+    padding: 1.25rem !important;
+  }
 }
 </style>
