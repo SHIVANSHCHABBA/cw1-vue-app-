@@ -12,20 +12,17 @@ function goCart(){ if (hasItems.value) router.push('/cart') }
 
 <template>
   <header class="mb-4 shadow-sm">
-    <nav class="px-3 py-2"
-         style="background: linear-gradient(90deg,#0d6efd,#6f42c1);">
+    <nav class="px-3 py-2 app-header">
       <div class="container d-flex align-items-center justify-content-between">
         <button class="btn btn-link text-white text-decoration-none fw-bold fs-4 p-0"
-                @click="goLessons">📚 EduLessons</button>
+                @click="goLessons">EduLessons</button>
 
-        <div class="d-flex align-items-center gap-3">
-          <button class="btn btn-light d-inline-flex align-items-center gap-2"
-                  :disabled="!hasItems" @click="goCart" aria-label="Go to cart">
-            <i class="fa-solid fa-cart-shopping"></i>
-            <span class="d-none d-md-inline">Cart</span>
-            <span v-if="count" class="badge text-bg-primary ms-2">{{ count }}</span>
-          </button>
-        </div>
+        <button class="btn btn-light d-inline-flex align-items-center gap-2"
+                :disabled="!hasItems" @click="goCart">
+          <i class="fa-solid fa-cart-shopping"></i>
+          Cart
+          <span v-if="count" class="badge text-bg-primary">{{ count }}</span>
+        </button>
       </div>
     </nav>
   </header>
@@ -41,7 +38,25 @@ function goCart(){ if (hasItems.value) router.push('/cart') }
   </footer>
 </template>
 
+<style>
+/* global background (subtle animated gradient) */
+body{
+  background: linear-gradient(120deg, #eef4ff, #f9fbff, #f8f5ff);
+  background-size: 400% 400%;
+  animation: bgMove 20s ease infinite;
+  min-height: 100vh;
+}
+@keyframes bgMove{
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+</style>
+
 <style scoped>
-.fade-enter-active, .fade-leave-active { transition: opacity .35s ease }
+.app-header{
+  background: linear-gradient(90deg,#0d6efd,#6f42c1);
+}
+.fade-enter-active, .fade-leave-active { transition: opacity .3s ease }
 .fade-enter-from, .fade-leave-to { opacity: 0 }
 </style>
