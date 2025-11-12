@@ -1,17 +1,44 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
+import { computed } from 'vue';
+import { RouterLink, RouterView } from 'vue-router';
+import { cart } from './store/cart.js';
+
+const count = computed(() =>
+  cart.items.reduce((sum, it) => sum + (it.qty || 0), 0)
+);
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <RouterLink to="/" class="navbar-brand">Lessons</RouterLink>
+
+      <div class="d-flex align-items-center">
+        <RouterLink to="/" class="nav-link d-inline-block">Lessons</RouterLink>
+
+        <RouterLink
+          v-if="count > 0"
+          to="/cart"
+          class="btn btn-primary ms-2"
+        >
+          Cart ({{ count }})
+        </RouterLink>
+
+        <button
+          v-else
+          class="btn btn-primary ms-2"
+          disabled
+        >
+          Cart (0)
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mt-4">
+    <RouterView />
+  </main>
 </template>
 
 <style scoped>
