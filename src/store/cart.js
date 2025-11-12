@@ -1,39 +1,28 @@
-import { reactive, computed } from 'vue';
+import { reactive, computed } from 'vue'
 
-const state = reactive({ items: [] });
-
-const total = computed(() =>
-  state.items.reduce((sum, it) => sum + (Number(it.price) || 0) * (it.qty || 0), 0)
-);
-
-function add(lesson) {
-  const existing = state.items.find(i => i._id === lesson._id);
-  if (existing) {
-    existing.qty = (existing.qty || 0) + 1;
-    return;
-  }
-  state.items.push({
-    _id: lesson._id,
-    topic: lesson.topic,
-    location: lesson.location,
-    price: lesson.price,
-    qty: 1
-  });
-}
-
-function remove(id) {
-  const idx = state.items.findIndex(i => i._id === id);
-  if (idx !== -1) state.items.splice(idx, 1);
-}
-
-function clear() {
-  state.items.length = 0;
-}
+const state = reactive({
+  items: [] // {_id, topic, location, price, qty}
+})
 
 export const cart = {
   items: state.items,
-  add,
-  remove,
-  clear,
-  total
-};
+  add(lesson) {
+    const found = state.items.find(i => i._id === lesson._id)
+    if (found) found.qty += 1
+    else state.items.push({
+      _id: lesson._id,
+      topic: lesson.topic,
+      location: lesson.location,
+      price: lesson.price,
+      qty: 1
+    })
+  },
+  remove(id) {
+    const i = state.items.findIndex(x => x._id === id)
+    if (i >= 0) state.items.splice(i, 1)
+  },
+  clear() {
+    state.items.splice(0)
+  },
+  total: computed(() => state.items.reduce((s, i) => s + i.price * i.qty, 0))
+}

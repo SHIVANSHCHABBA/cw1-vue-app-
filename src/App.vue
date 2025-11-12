@@ -1,7 +1,6 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterLink, RouterView } from 'vue-router'
 import { computed } from 'vue';
-import { RouterLink, RouterView } from 'vue-router';
 import { cart } from './store/cart.js';
 
 const count = computed(() =>
@@ -10,48 +9,14 @@ const count = computed(() =>
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <RouterLink to="/" class="navbar-brand">Lessons</RouterLink>
-
-      <div class="d-flex align-items-center">
-        <RouterLink to="/" class="nav-link d-inline-block">Lessons</RouterLink>
-
-        <RouterLink
-          v-if="count > 0"
-          to="/cart"
-          class="btn btn-primary ms-2"
-        >
-          Cart ({{ count }})
-        </RouterLink>
-
-        <button
-          v-else
-          class="btn btn-primary ms-2"
-          disabled
-        >
-          Cart (0)
-        </button>
-      </div>
-    </div>
+  <nav class="p-3 border-bottom d-flex gap-3 align-items-center">
+    <RouterLink to="/">Lessons</RouterLink>
+    <RouterLink to="/cart">Cart</RouterLink>
   </nav>
-
-  <main class="container mt-4">
-    <RouterView />
-  </main>
+  <RouterView />
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+nav a { text-decoration: none; }
+nav a.router-link-active { font-weight: 600; }
 </style>
