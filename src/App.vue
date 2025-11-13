@@ -26,11 +26,11 @@ function goCart(){ if (hasItems.value) router.push('/cart') }
           EduLessons
         </button>
 
-        <button class="btn btn-light d-inline-flex align-items-center gap-2"
+        <button class="btn btn-accent d-inline-flex align-items-center gap-2"
                 :disabled="!hasItems" @click="goCart">
           <i class="fa-solid fa-cart-shopping"></i>
           Cart
-          <span v-if="count" class="badge text-bg-primary">{{ count }}</span>
+          <span v-if="count" class="badge bg-accent-dark">{{ count }}</span>
         </button>
       </div>
     </nav>
@@ -49,7 +49,21 @@ function goCart(){ if (hasItems.value) router.push('/cart') }
 </template>
 
 <style>
-/* basic page setup */
+/* ----------------------------------------------------------------
+   COLOUR PALETTE — Matches the background image exactly
+---------------------------------------------------------------- */
+:root {
+  --blue-main: #3A6FB0;        /* soft muted navy */
+  --blue-light: #6A82B7;       /* pastel lavender blue */
+  --blue-hover: #2F5F9B;       /* darker hover */
+  --blue-focus: #8FB1D9;       /* soft highlight */
+
+  --white-overlay: rgba(245,247,251,0.35); /* subtle veil */
+}
+
+/* ----------------------------------------------------------------
+   Page Setup
+---------------------------------------------------------------- */
 body{
   margin: 0;
   min-height: 100vh;
@@ -57,7 +71,7 @@ body{
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-/* background image for whole page */
+/* Full-page background image */
 .bg-image{
   position: fixed;
   inset: 0;
@@ -70,21 +84,44 @@ body{
   filter: brightness(0.97) saturate(0.94);
 }
 
-/* soft veil so text & cards read nicely */
+/* Transparent soft veil on top of bg */
 .bg-image::after{
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(245, 247, 251, 0.35);
+  background: var(--white-overlay);
   backdrop-filter: blur(2px);
 }
 
-/* your top blue header bar – kept simple */
+/* ----------------------------------------------------------------
+   Header (now uses soft palette)
+---------------------------------------------------------------- */
 .app-header{
-  background: linear-gradient(90deg,#0d6efd,#6f42c1);
+  background: linear-gradient(90deg, var(--blue-main), var(--blue-light));
 }
 
-/* smooth page transitions */
+/* Cart button (light but colour matched) */
+.btn-accent{
+  background: #ffffff;
+  color: var(--blue-main);
+  border: 1px solid rgba(58,111,176,0.25);
+  transition: 0.25s ease;
+}
+
+.btn-accent:hover{
+  background: var(--blue-light);
+  color: white;
+  border-color: var(--blue-hover);
+}
+
+/* Badge */
+.bg-accent-dark{
+  background: var(--blue-hover) !important;
+}
+
+/* ----------------------------------------------------------------
+   Page transitions
+---------------------------------------------------------------- */
 .fade-enter-active, .fade-leave-active { transition: opacity .25s ease }
 .fade-enter-from, .fade-leave-to       { opacity: 0 }
 </style>
