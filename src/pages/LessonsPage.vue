@@ -41,9 +41,6 @@ const sorted = computed(() => {
 function addToCart(lesson){
   if ((lesson.space ?? lesson.spaces ?? 0) <= 0) return
   cart.add(lesson)
-  // decrement local visual spaces
-  if (typeof lesson.space === 'number') lesson.space = Math.max(0, lesson.space - 1)
-  else if (typeof lesson.spaces === 'number') lesson.spaces = Math.max(0, lesson.spaces - 1)
 }
 </script>
 
