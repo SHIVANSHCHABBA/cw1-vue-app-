@@ -8,13 +8,13 @@
 
       <p class="mb-1"><strong>Location:</strong> {{ lesson.location }}</p>
       <p class="mb-1"><strong>Price:</strong> £{{ lesson.price }}</p>
-      <p class="mb-3"><strong>Spaces:</strong> {{ lesson.space }}</p>
+      <p class="mb-3"><strong>Spaces:</strong> {{ (lesson.space ?? lesson.spaces ?? 0) - spacesDeducted }}</p>
 
       <button
         class="btn btn-primary mt-auto w-100"
-        :disabled="!(lesson.space > 0)"
+        :disabled="!((lesson.space ?? lesson.spaces ?? 0) - spacesDeducted > 0)"
         @click="onAdd(lesson)"
-        :aria-disabled="!(lesson.space > 0)">
+        :aria-disabled="!((lesson.space ?? lesson.spaces ?? 0) - spacesDeducted > 0)">
         Add to cart
       </button>
     </div>
@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-const props = defineProps({ lesson: Object, onAdd: Function })
+const props = defineProps({ lesson: Object, onAdd: Function, spacesDeducted: { type: Number, default: 0 } })
 const iconMap = {
   Math:'fa-calculator', English:'fa-book', Science:'fa-flask',
   Music:'fa-music', Drama:'fa-masks-theater', Art:'fa-palette',

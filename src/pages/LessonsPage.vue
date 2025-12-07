@@ -8,6 +8,7 @@ const loading = ref(true), error = ref(''), lessons = ref([])
 const query = ref('')
 const sortKey = ref('space')   // 'topic' | 'location' | 'price' | 'space'
 const sortAsc = ref(false)
+const spaceDecrements = ref({}) // track spaces deducted per lesson
 let debounceTimer = null
 
 async function loadAll(){
@@ -39,8 +40,10 @@ const sorted = computed(() => {
 })
 
 function addToCart(lesson){
-  if ((lesson.space ?? lesson.spaces ?? 0) <= 0) return
+  const currentSpaces = (lesson.space ?? lesson.spaces ?? 0) - (spaceDecrements.value[lesson._id] ?? 0)
+  if (currentSpaces <= 0) return
   cart.add(lesson)
+  spaceDecrements.value[lesson._id] = (spaceDecrements.value[lesson._id] ?? 0) + 1
 }
 </script>
 
@@ -88,7 +91,7 @@ function addToCart(lesson){
 
    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
      <div class="col" v-for="lesson in sorted" :key="lesson._id">
-       <LessonCard :lesson="lesson" :onAdd="addToCart" />
+       <LessonCard :lesson="lesson" :onAdd="addToCart" :spacesDeducted="spaceDecrements[lesson._id] ?? 0" />
      </div>
    </div>
   </div>
